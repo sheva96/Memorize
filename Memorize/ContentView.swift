@@ -9,16 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var emojies = ["✈️", "🚜", "🚎", "🚑", "😃", "🚀", "🚛", "🚚", "🛳", "🚤", "👺", "😸",
-                          "👩🏼‍💼", "🐶", "🌻", "🥣", "⛹🏼", "🧘🏻‍♂️", "🗼", "🎙", "🛍", "❤️", "❇️", "🇩🇪"]
+    @State var emojies = [String]()
     
-    @State var emojiCount = 24
+    var cars = ["🚜", "🚎", "🚚", "🚘", "🚔", "🚍", "🏎", "🚑"]
+    var animals = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"]
+    var things = ["⌚️", "📱", "💻", "🖥", "⌨️", "🖱", "🖨", "🎥"]
     
     var body: some View {
         VStack {
+            Text("Memorize!").font(.largeTitle)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(emojies[0..<emojiCount], id: \.self) { emoji in
+                    ForEach(emojies, id: \.self) { emoji in
                         CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
                     }
                 }
@@ -26,40 +28,49 @@ struct ContentView: View {
             .foregroundColor(.red)
             Spacer()
             HStack {
-                remove
+                carsButton
                 Spacer()
-                shuffle
+                animalsButton
                 Spacer()
-                add
+                thingsButton
             }
-            .font(.largeTitle)
+            .font(.title)
             .padding(.horizontal)
         }
         .padding(.horizontal)
     }
     
-    var remove: some View {
+    var carsButton: some View {
         Button {
-            if emojiCount > 1 {
-                emojiCount -= 1
-            }
+            emojies = cars.shuffled()
         } label: {
-            Image(systemName: "minus.circle")
+            VStack {
+                Image(systemName: "car.ferry")
+                Text("Cars")
+            }
+        }
+
+    }
+    
+    var animalsButton: some View {
+        Button {
+            emojies = animals.shuffled()
+        } label: {
+            VStack {
+                Image(systemName: "hare")
+                Text("Animals")
+            }
         }
     }
     
-    var shuffle: some View {
-        Button { emojies.shuffle() } label: { Text("Shuffle") }
-    }
-    
-    var add: some View {
+    var thingsButton: some View {
         Button {
-            if emojiCount < emojies.count {
-                emojiCount += 1
-            }
-            
+            emojies = things.shuffled()
         } label: {
-            Image(systemName: "plus.circle")
+            VStack {
+                Image(systemName: "desktopcomputer")
+                Text("Things")
+            }
         }
     }
 }
@@ -89,8 +100,7 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .previewDevice("iPhone 13")
 .previewInterfaceOrientation(.portrait)
-        ContentView()
-            .preferredColorScheme(.dark)
     }
 }
